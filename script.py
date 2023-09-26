@@ -9,6 +9,7 @@ connect = conn.connect(
     user='spotify',
     passwd='#Spotify2023',
     database='spotify',
+    auth_plugin='mysql_native_password'
 )
 
 class DB():
@@ -18,7 +19,6 @@ class DB():
             user='spotify',
             passwd='#Spotify2023',
             database='spotify',
-            auth_plugin='mysql_native_password'
         )
 
         return connect
@@ -31,12 +31,19 @@ class Worker(DB):
     def main(self):
         print('Starting...')
 
+        counter = 0
+
         collection = self.collection()
 
         self.token = self.get_token()
 
         for row in collection:
             time.sleep(random.randint(3,10))
+
+            if counter == 25:
+                time.sleep(random.randint(100, 600))
+
+            counter += 1
 
             response, status_code = self.get_artist(self.token, row['track_id'])
 
@@ -90,7 +97,7 @@ class Worker(DB):
         return response.json(), response.status_code
     
     def collection(self):
-        query = '''SELECT * FROM raw_data WHERE `update` = "0" LIMIT 100'''
+        query = '''SELECT * FROM raw_data WHERE `update` = "0"'''
 
         cursor = self.connect.cursor(dictionary=True)
 
