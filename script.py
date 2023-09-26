@@ -18,6 +18,7 @@ class DB():
             user='spotify',
             passwd='#Spotify2023',
             database='spotify',
+            auth_plugin='mysql_native_password'
         )
 
         return connect
