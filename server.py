@@ -67,12 +67,12 @@ class Worker(DB):
         return cursor.fetchall()
     
     def insert_album(self, artist_id, response):
-        query = '''INSERT INTO album (`artist_id`, `album_id`, `album_url`, `album_image`, `release_date`, `total_track`, `update`) VALUES (%s, %s, %s, %s, %s, %s, %s)'''
+        query = '''INSERT INTO album (`artist_id`, `album`, `album_id`, `album_url`, `album_image`, `release_date`, `total_track`, `update`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
 
         cursor = self.connect.cursor(dictionary=True)
 
         cursor.execute(query, [
-            artist_id, response['id'], response['external_urls']['spotify'], response['images'][0]['url'], response['release_date'], response['total_tracks'], "0"
+            artist_id, response['name'], response['id'],  response['external_urls']['spotify'], response['images'][0]['url'], response['release_date'], response['total_tracks'], "0"
         ])
 
         self.connect.commit()
