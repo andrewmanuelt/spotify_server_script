@@ -58,7 +58,7 @@ class Worker(DB):
                 self.update_data(row['artist_id'])
 
     def collection(self):
-        query = '''SELECT * FROM artist WHERE `update` = "0" LIMIT 2'''
+        query = '''SELECT * FROM artist WHERE `update` = "0"'''
 
         cursor = self.connect.cursor(dictionary=True)
 
