@@ -58,7 +58,7 @@ class Worker(DB):
                 self.update_data(row['artist_id'])
 
     def collection(self):
-        query = '''SELECT * FROM artist WHERE `update` = "0"'''
+        query = '''SELECT * FROM artist WHERE `update` = "0" ORDER BY id DESC'''
 
         cursor = self.connect.cursor(dictionary=True)
 
