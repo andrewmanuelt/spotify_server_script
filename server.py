@@ -50,12 +50,15 @@ class Worker(DB):
             if status_code == 400:
                 self.token = self.get_token()
 
-            counter += 1
-
-            for item in response:
-                self.insert_album(row['artist_id'], response=item)
-                
+            if len(response['items']) > 0:
+                for item in response['items']:
+                    self.insert_album(row['artist_id'], response=item)
+                    
+                    self.update_data(row['artist_id'])
+            else:
                 self.update_data(row['artist_id'])
+
+            counter += 1
 
     def collection(self):
         query = '''SELECT * FROM artist WHERE `update` = "0" ORDER BY id DESC'''
@@ -109,7 +112,7 @@ class Worker(DB):
 
         response = re.get(url, headers=Headers)
 
-        return response.json()['items'], response.status_code
+        return response.json(), response.status_code
 
 def main():
     print('Hello')
