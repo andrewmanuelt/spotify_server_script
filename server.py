@@ -37,13 +37,19 @@ class Worker(DB):
 
         self.token = self.get_token()
 
-        for row in collection:
+        print(len(collection))
+
+        for i, row in enumerate(collection):
             time.sleep(random.randint(3,10))
+
+            print(i)
 
             if counter == 25:
                 time.sleep(random.randint(100, 600))
             
             response, status_code = self.get_album(self.token, row['artist_id'])
+
+            print(response)
 
             if status_code == 400:
                 self.token = self.get_token()
@@ -53,9 +59,9 @@ class Worker(DB):
                     print(item)
                     self.insert_album(row['artist_id'], response=item)
                     
-                    self.update_data(row['artist_id'])
+                    self.update_data(row['artist_id'], 0)
             else:
-                self.update_data(row['artist_id'])
+                self.update_data(row['artist_id'], 1)
 
             counter += 1
 
@@ -84,8 +90,12 @@ class Worker(DB):
 
         self.connect.commit()
 
-    def update_data(self, artist_id):
-            query = '''UPDATE artist SET `update` = "1" WHERE `artist_id` = %s'''
+    def update_data(self, artist_id, is_empty_item = 0):
+            
+            if is_empty_item == 1:
+                query = '''UPDATE artist SET `update` = "2" WHERE `artist_id` = %s'''
+            else:
+                query = '''UPDATE artist SET `update` = "1" WHERE `artist_id` = %s'''
 
             cursor = self.connect.cursor(dictionary=True)
 
