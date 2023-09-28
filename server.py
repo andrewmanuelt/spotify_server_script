@@ -45,13 +45,12 @@ class Worker(DB):
             
             response, status_code = self.get_album(self.token, row['artist_id'])
 
-            print(response)
-
             if status_code == 400:
                 self.token = self.get_token()
 
             if len(response['items']) > 0:
                 for item in response['items']:
+                    print(item)
                     self.insert_album(row['artist_id'], response=item)
                     
                     self.update_data(row['artist_id'])
@@ -74,8 +73,13 @@ class Worker(DB):
 
         cursor = self.connect.cursor(dictionary=True)
 
+        if len(response['images']) == 0:
+            image = '-'
+        else:
+            image = response['images'][0]['url']
+
         cursor.execute(query, [
-            artist_id, response['name'], response['id'],  response['external_urls']['spotify'], response['images'][0]['url'], response['release_date'], response['total_tracks'], "0"
+            artist_id, response['name'], response['id'],  response['external_urls']['spotify'], image, response['release_date'], response['total_tracks'], "0"
         ])
 
         self.connect.commit()
