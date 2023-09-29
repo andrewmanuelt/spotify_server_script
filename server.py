@@ -56,7 +56,6 @@ class Worker(DB):
 
             if len(response['items']) > 0:
                 for item in response['items']:
-                    print(item)
                     self.insert_album(row['artist_id'], response=item)
                     
                     self.update_data(row['artist_id'], 0)

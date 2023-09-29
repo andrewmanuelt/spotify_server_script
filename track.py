@@ -43,16 +43,17 @@ class Worker(DB):
             if counter == 25:
                 time.sleep(random.randint(100, 600))
 
-            response, status_code = self.get_album(self.token, row['artist_id'])
+            response, status_code = self.get_track(self.token, row['album_id'])
 
             print(response)
 
             if status_code == 400:
                 self.token = self.get_token()
-            
-            self.insert_track(row['album_id'])
 
-            self.update_data(row['album_id'])
+            for item in response['items']:
+                self.insert_track(row['album_id'], artist_id=row['artist_id'], response=item)
+
+                self.update_data(row['album_id'])
 
         counter += 1
 
@@ -80,7 +81,7 @@ class Worker(DB):
         return "Bearer " + str(request.json()['access_token'])
     
     def insert_track(self, album_id, artist_id, response):
-        query = '''INSERT INTO album (`album_id`, `artist_id`, `track_id`, `track_name`, `track_link`, `duration`, `update`) VALUES (%s, %s, %s, %s, %s, %s, %s)'''
+        query = '''INSERT INTO track (`album_id`, `artist_id`, `track_id`, `track_name`, `track_link`, `duration`, `update`) VALUES (%s, %s, %s, %s, %s, %s, %s)'''
 
         cursor = self.connect.cursor(dictionary=True)
 
