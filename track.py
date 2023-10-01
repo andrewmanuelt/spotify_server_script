@@ -68,7 +68,7 @@ class Worker(DB):
 
     def get_token(self) -> str:
         header = {
-            "Authorization": "Basic ZDQxNTI1YmJhZDJlNDE0N2I2YmYyMDBmNjI0MzYxYWM6YTBhMWFmMzdiNGIzNDJhNjgxMDVkN2RlNmRhMzY1Yzk=",
+            "Authorization": "Basic NWI3YzUxNjZjYzY5NGY0ZjlhNTA5OTI2OGZhOWJlNWE6Y2IzOTdiNjhjZjUzNDY1MzhkMjM4YTk1ZjA1OGYwYmU=",
             "Content-Type": "application/x-www-form-urlencoded", 
         }
 
