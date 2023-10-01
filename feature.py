@@ -45,6 +45,8 @@ class Worker(DB):
 
             response, status_code = self.get_track_feature(self.token, row['track_id'])
 
+            print(response)
+
             if status_code == 404:
                 self.update_data(row['track_id'], 2)
             else:
